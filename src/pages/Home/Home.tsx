@@ -1,12 +1,11 @@
-import React from 'react';
-import { Box } from '@mui/material';
-import './Home.scss';
-import PokemonCard from '../../components/PokemonCard';
+import React from "react";
+import "./Home.scss";
+import Pokedex from "../../components/Pokedex";
+import { Box } from "@mui/material";
 
 const Home: React.FC = () => {
   return (
-    <Box component="div">
-    </Box>
+    <Pokedex />
   );
 };
 

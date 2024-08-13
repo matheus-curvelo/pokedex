@@ -11,7 +11,7 @@ const PokemonCard: React.FC<PokemonProps> = ({name, image}) => {
   return (
     <Box className="pokemon_card" component="div">
       <Box component="img" src={image} alt={name} />
-      <Box component="h1">{name}</Box>
+      <Box component="p">{name}</Box>
     </Box>
   );
 };
