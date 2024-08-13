@@ -1,9 +1,9 @@
-// src/components/PokemonDetails.tsx
-
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {useParams, useNavigate} from "react-router-dom";
 import {Box, Button} from "@mui/material";
+import typeColors from "../../utils/typeColors";
+import "./PokemonDetails.scss";
 
 interface Pokemon {
   id: number;
@@ -54,8 +54,11 @@ const PokemonDetails: React.FC = () => {
     return <p>No details found for this Pokémon.</p>;
   }
 
+  const primaryType = pokemon.types[0].type.name;
+  const backgroundColor = typeColors[primaryType] || "rgba(255, 255, 255, 0.8)";
+
   return (
-    <Box component="div" className="pokemon-details">
+    <Box component="div" className="pokemon_details" style={{backgroundColor}}>
       <Box component="h2">{pokemon.name}</Box>
       <Box
         component="img"

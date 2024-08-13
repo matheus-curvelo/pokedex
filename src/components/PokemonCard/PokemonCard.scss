@@ -1,12 +1,24 @@
+@import '../../styles/variables.scss';
+
 .pokemon_card {
-    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 16px;
+    color: $light;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease-in-out;
     cursor: pointer;
 
-    &:hover {
-        background-color: rgba($color: red, $alpha: .1);
+    p {
+        margin: 8px 0 0;
+        font-weight: bold;
     }
 
-    p {
-        text-transform: capitalize;
+    &:hover {
+        transform: scale(1.025);
     }
 }
