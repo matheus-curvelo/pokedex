@@ -10,6 +10,7 @@ interface PokemonData {
     sprites: {
       front_default: string;
     };
+    types: string[];
   }
 
 const Pokedex: React.FC = () => {
@@ -26,9 +27,10 @@ const Pokedex: React.FC = () => {
             `https://pokeapi.co/api/v2/pokemon/${index}`
           );
           return {
+            id: response.data.id,
             name: response.data.name,
             sprites: response.data.sprites,
-            id: response.data.id,
+            types: response.data.types.map((typeInfo: { type: { name: string } }) => typeInfo.type.name),
           };
         });
 
@@ -60,6 +62,7 @@ const Pokedex: React.FC = () => {
             id={pokemon.id}
             name={pokemon.name}
             image={pokemon.sprites.front_default}
+            types={pokemon.types}
           />
         ))}
       </Box>
