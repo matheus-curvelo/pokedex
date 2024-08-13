@@ -1,0 +1,31 @@
+@import './variables';
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+// Estilos da barra de rolagem
+
+::-webkit-scrollbar {
+    width: 0.375rem;
+}
+
+::-webkit-scrollbar-track {
+    background: $dark;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba($primary, 0.75);
+
+    &:hover {
+        background-color: rgba($secondary, .75);
+    }
+}
+
+// Outros
+
+:focus-visible {
+    outline: none;
+}
