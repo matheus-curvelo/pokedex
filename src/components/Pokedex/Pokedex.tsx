@@ -5,11 +5,12 @@ import {Box} from "@mui/material";
 import "./Pokedex.scss";
 
 interface PokemonData {
-  name: string;
-  sprites: {
-    front_default: string;
-  };
-}
+    id: number;
+    name: string;
+    sprites: {
+      front_default: string;
+    };
+  }
 
 const Pokedex: React.FC = () => {
   const [pokemons, setPokemons] = useState<PokemonData[]>([]);
@@ -27,6 +28,7 @@ const Pokedex: React.FC = () => {
           return {
             name: response.data.name,
             sprites: response.data.sprites,
+            id: response.data.id,
           };
         });
 
@@ -54,7 +56,8 @@ const Pokedex: React.FC = () => {
         className="wrapper">
         {pokemons.map(pokemon => (
           <PokemonCard
-            key={pokemon.name}
+            key={pokemon.id}
+            id={pokemon.id}
             name={pokemon.name}
             image={pokemon.sprites.front_default}
           />
