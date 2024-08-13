@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import PokemonCard from "../PokemonCard";
-import {Box} from "@mui/material";
+import {Box, Button} from "@mui/material";
 import "./Pokedex.scss";
 
 interface PokemonData {
@@ -78,9 +78,12 @@ const Pokedex: React.FC = () => {
         ))}
       </Box>
       {!loading && hasMorePokemons && (
-        <Box component="button" onClick={loadMorePokemons} disabled={loading}>
+        <Button
+          variant="contained"
+          onClick={loadMorePokemons}
+          disabled={loading}>
           Carregar
-        </Box>
+        </Button>
       )}
       {!loading && !hasMorePokemons && (
         <Box component="p" className="no-more-pokemons">

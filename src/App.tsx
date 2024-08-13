@@ -2,8 +2,9 @@ import React from "react";
 import {Box, CssBaseline, ThemeProvider} from "@mui/material";
 import "./App.scss";
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
-import Home from "./pages/Home";
-import theme from './theme';
+import theme from "./theme";
+import Pokedex from "./components/Pokedex";
+import PokemonDetails from "./components/PokemonDetails";
 
 const App: React.FC = () => {
   return (
@@ -12,7 +13,8 @@ const App: React.FC = () => {
       <Router>
         <Box component="div" className="content-page">
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Pokedex />} />
+            <Route path="/pokemon/:id" element={<PokemonDetails />} />
           </Routes>
         </Box>
       </Router>
