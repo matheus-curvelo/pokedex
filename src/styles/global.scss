@@ -6,6 +6,11 @@ body {
     padding: 0;
 }
 
+html,
+.content-page {
+    background-color: $light;
+}
+
 // Estilos da barra de rolagem
 
 ::-webkit-scrollbar {

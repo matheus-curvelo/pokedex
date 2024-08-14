@@ -1,5 +1,5 @@
 import React from "react";
-import {Box, CssBaseline, ThemeProvider} from "@mui/material";
+import {Box, Container, CssBaseline, ThemeProvider} from "@mui/material";
 import "./App.scss";
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import theme from "./theme";
@@ -12,10 +12,12 @@ const App: React.FC = () => {
       <CssBaseline />
       <Router>
         <Box component="div" className="content-page">
-          <Routes>
-            <Route path="/" element={<Pokedex />} />
-            <Route path="/pokemon/:id" element={<PokemonDetails />} />
-          </Routes>
+          <Container>
+            <Routes>
+              <Route path="/" element={<Pokedex />} />
+              <Route path="/pokemon/:id" element={<PokemonDetails />} />
+            </Routes>
+          </Container>
         </Box>
       </Router>
     </ThemeProvider>

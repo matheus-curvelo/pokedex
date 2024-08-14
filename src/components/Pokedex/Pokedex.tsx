@@ -71,7 +71,7 @@ const Pokedex: React.FC = () => {
 
   return (
     <Box component="div" className="pokedex">
-      <Box component="h1">Pokédex</Box>
+      <Box component="h1" className="pokedex_title">Pokédex</Box>
       <Box component="div" className="wrapper">
         {pokemons.map(pokemon => (
           <PokemonCard
@@ -87,7 +87,8 @@ const Pokedex: React.FC = () => {
         <Button
           variant="contained"
           onClick={loadMorePokemons}
-          disabled={loading}>
+          disabled={loading}
+          >
           Carregar mais
         </Button>
       )}

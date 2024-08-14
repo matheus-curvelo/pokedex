@@ -1,9 +1,21 @@
 @import '../../styles/variables.scss';
 
 .pokedex {
+    .pokedex_title {
+        text-align: center;
+    }
     .wrapper {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
         gap: 1rem;
+    }
+
+    button {
+        display: block;
+        margin: 1.25rem auto;
+    }
+
+    .no-more-pokemons {
+        font-weight: bold;
     }
 }

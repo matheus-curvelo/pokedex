@@ -9,9 +9,12 @@
     padding: 16px;
     color: $light;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 8px rgba($dark, 0.2);
     transition: transform 0.2s ease-in-out;
     cursor: pointer;
+    border: 2px solid;
+    border-color: transparent;
+    transition: border-color .15s;
 
     p {
         margin: 8px 0 0;
@@ -19,6 +22,6 @@
     }
 
     &:hover {
-        transform: scale(1.025);
+        border-color: rgba($color: $dark, $alpha: 7.5);
     }
 }
