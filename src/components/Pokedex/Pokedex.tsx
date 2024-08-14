@@ -29,7 +29,7 @@ const Pokedex: React.FC = () => {
         const pokemonList = response.data.results;
 
         if (pokemonList.length < limit) {
-          setHasMorePokemons(false); // Se o número de resultados for menor que o limite, não há mais Pokémon
+          setHasMorePokemons(false);
         }
 
         const pokemonDataPromises = pokemonList.map(
@@ -47,7 +47,13 @@ const Pokedex: React.FC = () => {
         );
 
         const newPokemons = await Promise.all(pokemonDataPromises);
-        setPokemons(prevPokemons => [...prevPokemons, ...newPokemons]);
+
+        setPokemons(prevPokemons => [
+          ...prevPokemons,
+          ...newPokemons.filter(
+            newPokemon => !prevPokemons.some(p => p.id === newPokemon.id)
+          ),
+        ]);
       } catch (error) {
         console.error("Error fetching Pokémon data:", error);
       } finally {
@@ -82,7 +88,7 @@ const Pokedex: React.FC = () => {
           variant="contained"
           onClick={loadMorePokemons}
           disabled={loading}>
-          Carregar
+          Carregar mais
         </Button>
       )}
       {!loading && !hasMorePokemons && (
