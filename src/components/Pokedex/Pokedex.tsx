@@ -18,13 +18,19 @@ interface PokemonData {
 const Pokedex: React.FC = () => {
   const [pokemons, setPokemons] = useState<PokemonData[]>([]);
   const [loading, setLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1); // Página atual
-  const [nextPageUrl, setNextPageUrl] = useState<string | null>(null); // URL da próxima página
-  const [previousPageUrl, setPreviousPageUrl] = useState<string | null>(null); // URL da página anterior
-  const [totalPages, setTotalPages] = useState(0); // Número total de páginas
-  const limit = 20; // Número de Pokémon por página
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const [nextPageUrl, setNextPageUrl] = useState<string | null>(null);
+  const [previousPageUrl, setPreviousPageUrl] = useState<string | null>(null);
+  const [totalPages, setTotalPages] = useState(0);
+  const limit = 20;
   const isMobile = useMediaQuery("(max-width:600px)");
+
+  useEffect(() => {
+    const savedPage = localStorage.getItem("currentPage");
+    if (savedPage) {
+      setCurrentPage(parseInt(savedPage, 10));
+    }
+  }, []);
 
   useEffect(() => {
     const fetchPokemons = async (url: string) => {
@@ -35,7 +41,6 @@ const Pokedex: React.FC = () => {
 
         setNextPageUrl(response.data.next);
         setPreviousPageUrl(response.data.previous);
-
         setTotalPages(Math.ceil(response.data.count / limit));
 
         const pokemonDataPromises = pokemonList.map(
@@ -70,6 +75,7 @@ const Pokedex: React.FC = () => {
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
+    localStorage.setItem("currentPage", page.toString());
   };
 
   const handleNextPage = () => {
@@ -86,7 +92,7 @@ const Pokedex: React.FC = () => {
 
   const getPageNumbers = () => {
     const pageNumbers = [];
-    const maxPagesToShow = isMobile ? 3 : 5; // Mostrar 3 páginas no mobile e 5 no desktop
+    const maxPagesToShow = isMobile ? 3 : 5;
 
     let startPage = Math.max(currentPage - Math.floor(maxPagesToShow / 2), 1);
     let endPage = startPage + maxPagesToShow - 1;
