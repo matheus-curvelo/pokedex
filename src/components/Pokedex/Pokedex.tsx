@@ -1,7 +1,9 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import PokemonCard from "../PokemonCard";
-import {Box, Button} from "@mui/material";
+import {Box, Button, IconButton, useMediaQuery} from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import "./Pokedex.scss";
 
 interface PokemonData {
@@ -16,21 +18,25 @@ interface PokemonData {
 const Pokedex: React.FC = () => {
   const [pokemons, setPokemons] = useState<PokemonData[]>([]);
   const [loading, setLoading] = useState(true);
-  const [offset, setOffset] = useState(0); // Paginamento
-  const [hasMorePokemons, setHasMorePokemons] = useState(true); // Verifica se existem mais Pokémons
-  const limit = 50; // Número de Pokémon a serem buscados por vez
+  const [currentPage, setCurrentPage] = useState(1); // Página atual
+  const [nextPageUrl, setNextPageUrl] = useState<string | null>(null); // URL da próxima página
+  const [previousPageUrl, setPreviousPageUrl] = useState<string | null>(null); // URL da página anterior
+  const [totalPages, setTotalPages] = useState(0); // Número total de páginas
+  const limit = 20; // Número de Pokémon por página
+
+  const isMobile = useMediaQuery("(max-width:600px)");
 
   useEffect(() => {
-    const fetchPokemons = async () => {
+    const fetchPokemons = async (url: string) => {
       try {
-        const response = await axios.get(
-          `https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`
-        );
+        setLoading(true);
+        const response = await axios.get(url);
         const pokemonList = response.data.results;
 
-        if (pokemonList.length < limit) {
-          setHasMorePokemons(false);
-        }
+        setNextPageUrl(response.data.next);
+        setPreviousPageUrl(response.data.previous);
+
+        setTotalPages(Math.ceil(response.data.count / limit));
 
         const pokemonDataPromises = pokemonList.map(
           async (pokemon: {url: string}) => {
@@ -47,13 +53,7 @@ const Pokedex: React.FC = () => {
         );
 
         const newPokemons = await Promise.all(pokemonDataPromises);
-
-        setPokemons(prevPokemons => [
-          ...prevPokemons,
-          ...newPokemons.filter(
-            newPokemon => !prevPokemons.some(p => p.id === newPokemon.id)
-          ),
-        ]);
+        setPokemons(newPokemons);
       } catch (error) {
         console.error("Error fetching Pokémon data:", error);
       } finally {
@@ -61,18 +61,80 @@ const Pokedex: React.FC = () => {
       }
     };
 
-    fetchPokemons();
-  }, [offset]);
+    fetchPokemons(
+      `https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${
+        (currentPage - 1) * limit
+      }`
+    );
+  }, [currentPage]);
 
-  const loadMorePokemons = () => {
-    setLoading(true);
-    setOffset(prevOffset => prevOffset + limit);
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const handleNextPage = () => {
+    if (nextPageUrl) {
+      setCurrentPage(prevPage => prevPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (previousPageUrl) {
+      setCurrentPage(prevPage => prevPage - 1);
+    }
+  };
+
+  const getPageNumbers = () => {
+    const pageNumbers = [];
+    const maxPagesToShow = isMobile ? 3 : 5; // Mostrar 3 páginas no mobile e 5 no desktop
+
+    let startPage = Math.max(currentPage - Math.floor(maxPagesToShow / 2), 1);
+    let endPage = startPage + maxPagesToShow - 1;
+
+    if (endPage > totalPages) {
+      endPage = totalPages;
+      startPage = Math.max(endPage - maxPagesToShow + 1, 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(i);
+    }
+
+    return pageNumbers;
   };
 
   return (
     <Box component="div" className="pokedex">
-      <Box component="h1" className="pokedex_title">Pokédex</Box>
-      <Box component="div" className="wrapper">
+      <Box component="div" className="pokedex_header">
+        <Box component="h1">Pokédex</Box>
+        <Box component="div" className="pagination_controls">
+          <IconButton
+            onClick={handlePreviousPage}
+            disabled={!previousPageUrl || loading}>
+            <ArrowBackIcon />
+          </IconButton>
+
+          <Box component="div" className="page_numbers">
+            {getPageNumbers().map(page => (
+              <Button
+                key={page}
+                variant={page === currentPage ? "contained" : "outlined"}
+                onClick={() => handlePageChange(page)}
+                disabled={loading}>
+                {page}
+              </Button>
+            ))}
+          </Box>
+
+          <IconButton
+            onClick={handleNextPage}
+            disabled={!nextPageUrl || loading}>
+            <ArrowForwardIcon />
+          </IconButton>
+        </Box>
+      </Box>
+
+      <Box component="div" className="pokedex_wrapper">
         {pokemons.map(pokemon => (
           <PokemonCard
             key={pokemon.id}
@@ -83,20 +145,8 @@ const Pokedex: React.FC = () => {
           />
         ))}
       </Box>
-      {!loading && hasMorePokemons && (
-        <Button
-          variant="contained"
-          onClick={loadMorePokemons}
-          disabled={loading}
-          >
-          Carregar mais
-        </Button>
-      )}
-      {!loading && !hasMorePokemons && (
-        <Box component="p" className="no-more-pokemons">
-          Não existem mais pokémons...
-        </Box>
-      )}
+
+      {loading && <Box component="p">Carregando...</Box>}
     </Box>
   );
 };

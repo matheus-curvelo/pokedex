@@ -1,21 +1,36 @@
 @import '../../styles/variables.scss';
 
 .pokedex {
-    .pokedex_title {
-        text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+
+    .pokedex_header {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        .pagination_controls {
+            display: flex;
+            gap: 0.5rem;
+
+            .page_numbers {
+                display: flex;
+                gap: 1rem;
+
+                button {
+                    width: 32px;
+                    min-width: unset;
+                }
+            }
+        }
     }
-    .wrapper {
+
+    .pokedex_wrapper {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
         gap: 1rem;
-    }
-
-    button {
-        display: block;
-        margin: 1.25rem auto;
-    }
-
-    .no-more-pokemons {
-        font-weight: bold;
+        margin-bottom: 1.75rem;
     }
 }
