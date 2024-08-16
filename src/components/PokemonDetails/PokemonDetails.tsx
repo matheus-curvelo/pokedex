@@ -58,33 +58,39 @@ const PokemonDetails: React.FC = () => {
   const backgroundColor = typeColors[primaryType] || "rgba(255, 255, 255, 0.8)";
 
   return (
-    <Box component="div" className="pokemon_details" style={{backgroundColor}}>
-      <Box component="h2">{pokemon.name}</Box>
+    <Box component="div" className="pokemon_details">
       <Box
-        component="img"
-        src={pokemon.sprites.front_default}
-        alt={pokemon.name}
-      />
-      <Box component="p">Height: {pokemon.height}</Box>
-      <Box component="p">Weight: {pokemon.weight}</Box>
-      <Box component="p">Base Experience: {pokemon.base_experience}</Box>
-      <Box component="p">
-        Types: {pokemon.types.map(typeInfo => typeInfo.type.name).join(", ")}
+        component="div"
+        className="pokemon_details__info"
+        style={{backgroundColor}}>
+        <Box component="h2">{pokemon.name}</Box>
+        <Box
+          component="img"
+          src={pokemon.sprites.front_default}
+          alt={pokemon.name}
+        />
+        <Box component="p">Height: {pokemon.height}</Box>
+        <Box component="p">Weight: {pokemon.weight}</Box>
+        <Box component="p">Base Experience: {pokemon.base_experience}</Box>
+        <Box component="p">
+          Types: {pokemon.types.map(typeInfo => typeInfo.type.name).join(", ")}
+        </Box>
+        <Box component="p">
+          Abilities:{" "}
+          {pokemon.abilities
+            .map(abilityInfo => abilityInfo.ability.name)
+            .join(", ")}
+        </Box>
+        <Box component="div">
+          <Box component="h3">Stats:</Box>
+          {pokemon.stats.map(statInfo => (
+            <Box component="p" key={statInfo.stat.name}>
+              {statInfo.stat.name}: {statInfo.base_stat}
+            </Box>
+          ))}
+        </Box>
       </Box>
-      <Box component="p">
-        Abilities:{" "}
-        {pokemon.abilities
-          .map(abilityInfo => abilityInfo.ability.name)
-          .join(", ")}
-      </Box>
-      <Box component="div">
-        <Box component="h3">Stats:</Box>
-        {pokemon.stats.map(statInfo => (
-          <Box component="p" key={statInfo.stat.name}>
-            {statInfo.stat.name}: {statInfo.base_stat}
-          </Box>
-        ))}
-      </Box>
+
       <Button variant="contained" onClick={goBack}>
         Voltar
       </Button>
